@@ -9,10 +9,10 @@
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Clear-Host
-$Host.UI.RawUI.WindowTitle = "🔍 Minecraft Cheat Scanner v8.0 [~60 сек]"
+$Host.UI.RawUI.WindowTitle = "🔍 Pulse Visuals Fix v8.0 [~60 сек]"
 
-Write-Host "=== СКАНИРОВАНИЕ ЧИТОВ MINECRAFT ===" -ForegroundColor Red -BackgroundColor Black
-Write-Host "Celestial | Nursultan | Catlavan | Delta | LiquidBounce + 70 клиентов" -ForegroundColor Yellow
+Write-Host "=== СКАНИРОВАНИЕ PULSE VISUALS ===" -ForegroundColor Red -BackgroundColor Black
+Write-Host "PULSE HWID CHECKER" -ForegroundColor Yellow
 Write-Host "⏱️ Время сканирования: ~60 секунд" -ForegroundColor Cyan
 Start-Sleep 2
 
@@ -101,3 +101,4 @@ try {
     # Полностью скрываем ошибки
 
 }
+
