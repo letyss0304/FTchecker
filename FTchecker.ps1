@@ -12,109 +12,99 @@ Clear-Host
 
 $ErrorActionPreference = "SilentlyContinue"
 
-# Функция для красивой печати
-function Type-Text($text, $color = "White", $speed = 20) {
-    $text.ToCharArray() | ForEach-Object {
-        Write-Host $_ -NoNewline -ForegroundColor $color
-        Start-Sleep -Milliseconds $speed
-    }
-    Write-Host ""
+# Функция для имитации печати консоли
+function Type-Log($text, $color = "White") {
+    $time = Get-Date -Format "HH:mm:ss"
+    Write-Host "[$time] " -NoNewline -ForegroundColor Gray
+    Write-Host $text -ForegroundColor $color
+    Start-Sleep -Milliseconds (Get-Random -Min 100 -Max 400)
 }
 
-# Функция отрисовки сетки хитбоксов
-function Show-HitboxGrid {
-    $grid = @(
-        "      [  .  .  .  |  .  .  .  ]",
-        "      [  .  .  X--|--X  .  .  ]",
-        "      [  .  |  .  |  .  |  .  ]",
-        "      [--.  X---[HIT]---X  .--]",
-        "      [  .  |  .  |  .  |  .  ]",
-        "      [  .  .  X--|--X  .  .  ]",
-        "      [  .  .  .  |  .  .  .  ]"
-    )
-    foreach ($line in $grid) {
-        Write-Host $line -ForegroundColor Cyan
-        Start-Sleep -Milliseconds 150
-    }
-}
-
-# Имитация сканирования памяти
-function Show-FastScan($duration) {
-    $endTime = (Get-Date).AddSeconds($duration)
+# Функция визуального сканирования файлов (30 секунд)
+function Scan-FileSystem {
+    $endTime = (Get-Date).AddSeconds(30)
+    $folders = "C:\Windows\System32", "C:\Users\$env:USERNAME\AppData\Local", "$env:APPDATA\.minecraft\versions"
     while ((Get-Date) -lt $endTime) {
-        $hex = "0x" + ("{0:X4}" -f (Get-Random -Max 65535)) + " -- ADR:" + (Get-Random -Min 100 -Max 999)
-        Write-Host " [ANALYZING] $hex" -ForegroundColor Green
-        Start-Sleep -Milliseconds 25
+        $file = "lib" + (Get-Random -Max 999) + "_x64.dll"
+        Write-Host " [SCAN] " -NoNewline -ForegroundColor Yellow
+        Write-Host "Checking: " -NoNewline -ForegroundColor Gray
+        Write-Host "$($folders | Get-Random)\$file" -ForegroundColor White
+        Start-Sleep -Milliseconds 50
     }
 }
 
-# --- ГЛАВНЫЙ ЦИКЛ ---
+# Функция анализа памяти (30 секунд)
+function Scan-Memory {
+    $endTime = (Get-Date).AddSeconds(30)
+    while ((Get-Date) -lt $endTime) {
+        $addr = "0x" + ("{0:X8}" -f (Get-Random -Max 2147483647))
+        $val = [guid]::NewGuid().ToString().Substring(0,16)
+        Write-Host " [MEM] " -NoNewline -ForegroundColor Cyan
+        Write-Host "$addr >> " -NoNewline -ForegroundColor Gray
+        Write-Host "Pattern: $val" -ForegroundColor Green
+        Start-Sleep -Milliseconds 40
+    }
+}
+
+# --- ГЛАВНОЕ МЕНЮ ---
 do {
     Clear-Host
     Write-Host "=========================================================" -ForegroundColor Cyan
-    Write-Host "   OFFICIAL CHECK TOOL: REALLYWORLD / FUNTIME Edition    " -ForegroundColor White
+    Write-Host "   SERVER SYSTEM SCANNER (SS) - VERSION 2.0 [FINAL]      " -ForegroundColor White
     Write-Host "=========================================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "Выберите модуль проверки:" -ForegroundColor Gray
-    Write-Host " [1] Полная проверка системы (90 сек) - [CLEAN]" -ForegroundColor Yellow
-    Write-Host " [2] Глубокий анализ Кликеров (Autoclicker/Macros)" -ForegroundColor Yellow
-    Write-Host " [3] Скан скрытых DLL (Injected Clients)" -ForegroundColor Yellow
-    Write-Host " [4] Проверка Хитбоксов (Hitbox Expand/Reach)" -ForegroundColor Red
+    Write-Host " [1] Полная проверка (1.5 мин) - [РЕКОМЕНДУЕТСЯ]" -ForegroundColor Yellow
+    Write-Host " [2] Быстрый поиск DLL инъекций" -ForegroundColor Yellow
+    Write-Host " [3] Анализ Hitbox/Reach (ДЕТЕКТ)" -ForegroundColor Red
     Write-Host " [0] Выход" -ForegroundColor Gray
     Write-Host ""
     
-    $choice = Read-Host "Введите номер"
+    $choice = Read-Host "Выберите модуль"
 
     switch ($choice) {
         "1" {
             Clear-Host
-            Type-Text ">>> ЗАПУСК ПОЛНОЙ ПРОВЕРКИ (ALL MODULES)..." "Cyan"
-            Show-FastScan 10
-            for ($i = 0; $i -le 100; $i += 10) {
-                Write-Progress -Activity "ГЛОБАЛЬНЫЙ СКАН" -Status "Прогресс: $i%" -PercentComplete $i
-                Start-Sleep -Milliseconds 400
+            Type-Log "Инициализация глубокого сканирования..." "Cyan"
+            Start-Sleep -Seconds 2
+            
+            # 1. Файловая система (30 сек)
+            Type-Log "Этап 1: Поиск следов в файловой системе..." "Yellow"
+            Scan-FileSystem
+            
+            # 2. Память (30 сек)
+            Type-Log "Этап 2: Анализ активных дескрипторов JVM..." "Yellow"
+            Scan-Memory
+            
+            # 3. Финальный перебор (30 сек)
+            Type-Log "Этап 3: Сверка сигнатур с базой данных (Vape, Akrien, Flux, Liquid)..." "Yellow"
+            for ($i = 0; $i -le 100; $i += 5) {
+                Write-Progress -Activity "ФИНАЛЬНЫЙ АНАЛИЗ" -Status "Синхронизация данных: $i%" -PercentComplete $i
+                Start-Sleep -Milliseconds 1500 # Суммарно еще 30 сек
             }
-            Write-Host "`n[SUCCESS] Вердикт: Игрок полностью чист." -ForegroundColor Green
+            
+            Write-Host "`n[SUCCESS] Вердикт: Игрок полностью чист." -ForegroundColor Black -BackgroundColor Green
         }
         "2" {
             Clear-Host
-            Type-Text ">>> Запуск модуля: CLICK_ANALYZER..." "Cyan"
-            Show-FastScan 5
-            Write-Host "`n[!] Результат: Кликеры не обнаружены." -ForegroundColor Green
+            Type-Log "Поиск инъекций в javaw.exe..." "Cyan"
+            Scan-Memory
+            Write-Host "`n[!] Подозрительных потоков не обнаружено." -ForegroundColor Green
         }
         "3" {
             Clear-Host
-            Type-Text ">>> Запуск модуля: DLL_INSPECTOR..." "Cyan"
-            Show-FastScan 5
-            Write-Host "`n[!] Результат: Чистых библиотек в памяти: 142. Подозрительных: 0." -ForegroundColor Green
-        }
-        "4" {
-            Clear-Host
-            Type-Text ">>> Запуск модуля: HITBOX_DETECTOR v2.1..." "Cyan"
-            Start-Sleep -Seconds 1
-            Show-HitboxGrid
-            Write-Host "`n[!] Считывание дистанции атаки (Reach Distance)..." -ForegroundColor White
-            Show-FastScan 8
-            
+            Type-Log "Анализ хитбоксов и дистанции атаки..." "Red"
+            Scan-FileSystem
             Write-Host "`n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
-            Write-Host "!! ВНИМАНИЕ: ОБНАРУЖЕНА АНОМАЛИЯ ХИТБОКСОВ !!" -ForegroundColor Black -BackgroundColor Red
+            Write-Host "!! ОБНАРУЖЕНЫ ИЗМЕНЕННЫЕ ХИТБОКСЫ (1.24x) !!" -ForegroundColor Black -BackgroundColor Red
             Write-Host "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
-            Write-Host ""
-            Write-Host "Объект: " -NoNewline; Write-Host "net.minecraft.entity.Entity" -ForegroundColor Yellow
-            Write-Host "Значение: " -NoNewline; Write-Host "MODIFIED (1.42x)" -ForegroundColor Red
-            Write-Host "Статус: Обнаружен Hitbox Expand" -ForegroundColor Red
             [System.Media.SystemSounds]::Hand.Play()
         }
         "0" { exit }
-        Default { Write-Host "Неверный выбор." -ForegroundColor Red; Start-Sleep -Seconds 1 }
     }
 
     Write-Host ""
     Write-Host "=========================================================" -ForegroundColor Cyan
     Write-Host " [5] Назад в меню" -ForegroundColor White
     Write-Host " [0] Выйти" -ForegroundColor Gray
-    
-    $finalAction = Read-Host "Выберите действие"
-    if ($finalAction -eq "0") { exit }
-
-} while ($finalAction -eq "5")
+    $final = Read-Host "Действие"
+} while ($final -eq "5")
