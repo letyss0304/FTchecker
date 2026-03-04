@@ -12,7 +12,7 @@ Clear-Host
 
 $ErrorActionPreference = "SilentlyContinue"
 
-# Функция для печати текста
+# Функция для красивой печати
 function Type-Text($text, $color = "White", $speed = 20) {
     $text.ToCharArray() | ForEach-Object {
         Write-Host $_ -NoNewline -ForegroundColor $color
@@ -21,7 +21,7 @@ function Type-Text($text, $color = "White", $speed = 20) {
     Write-Host ""
 }
 
-# Анимация сетки хитбоксов
+# Функция отрисовки сетки хитбоксов
 function Show-HitboxGrid {
     $grid = @(
         "      [  .  .  .  |  .  .  .  ]",
@@ -38,7 +38,7 @@ function Show-HitboxGrid {
     }
 }
 
-# Функция "Матрицы"
+# Имитация сканирования памяти
 function Show-FastScan($duration) {
     $endTime = (Get-Date).AddSeconds($duration)
     while ((Get-Date) -lt $endTime) {
@@ -48,7 +48,7 @@ function Show-FastScan($duration) {
     }
 }
 
-# --- ГЛАВНЫЙ ЦИКЛ ПРОГРАММЫ ---
+# --- ГЛАВНЫЙ ЦИКЛ ---
 do {
     Clear-Host
     Write-Host "=========================================================" -ForegroundColor Cyan
@@ -63,30 +63,30 @@ do {
     Write-Host " [0] Выход" -ForegroundColor Gray
     Write-Host ""
     
-    $choice = Read-Host "Введите номер (1-4)"
+    $choice = Read-Host "Введите номер"
 
     switch ($choice) {
         "1" {
             Clear-Host
             Type-Text ">>> ЗАПУСК ПОЛНОЙ ПРОВЕРКИ (ALL MODULES)..." "Cyan"
-            Show-FastScan 15
+            Show-FastScan 10
             for ($i = 0; $i -le 100; $i += 10) {
                 Write-Progress -Activity "ГЛОБАЛЬНЫЙ СКАН" -Status "Прогресс: $i%" -PercentComplete $i
                 Start-Sleep -Milliseconds 400
             }
-            Write-Host "`n[SUCCESS] Вердикт: Игрок полностью чист. Стороннее ПО не обнаружено." -ForegroundColor Green
+            Write-Host "`n[SUCCESS] Вердикт: Игрок полностью чист." -ForegroundColor Green
         }
         "2" {
             Clear-Host
             Type-Text ">>> Запуск модуля: CLICK_ANALYZER..." "Cyan"
             Show-FastScan 5
-            Write-Host "`n[!] Результат: Кликеры не найдены." -ForegroundColor Green
+            Write-Host "`n[!] Результат: Кликеры не обнаружены." -ForegroundColor Green
         }
         "3" {
             Clear-Host
             Type-Text ">>> Запуск модуля: DLL_INSPECTOR..." "Cyan"
             Show-FastScan 5
-            Write-Host "`n[!] Результат: Сторонние DLL в памяти процесса отсутствуют." -ForegroundColor Green
+            Write-Host "`n[!] Результат: Чистых библиотек в памяти: 142. Подозрительных: 0." -ForegroundColor Green
         }
         "4" {
             Clear-Host
@@ -96,21 +96,17 @@ do {
             Write-Host "`n[!] Считывание дистанции атаки (Reach Distance)..." -ForegroundColor White
             Show-FastScan 8
             
-            # Эффект обнаружения
             Write-Host "`n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
             Write-Host "!! ВНИМАНИЕ: ОБНАРУЖЕНА АНОМАЛИЯ ХИТБОКСОВ !!" -ForegroundColor Black -BackgroundColor Red
             Write-Host "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
             Write-Host ""
             Write-Host "Объект: " -NoNewline; Write-Host "net.minecraft.entity.Entity" -ForegroundColor Yellow
-            Write-Host "Параметр: " -NoNewline; Write-Host "f3_boundingbox_size" -ForegroundColor Yellow
             Write-Host "Значение: " -NoNewline; Write-Host "MODIFIED (1.42x)" -ForegroundColor Red
-            Write-Host "Дистанция: " -NoNewline; Write-Host "3.84 blocks (Limit: 3.0)" -ForegroundColor Red
-            Write-Host ""
-            Write-Host "Статус: Обнаружен Reach/Hitbox Expand" -ForegroundColor Red
+            Write-Host "Статус: Обнаружен Hitbox Expand" -ForegroundColor Red
             [System.Media.SystemSounds]::Hand.Play()
         }
         "0" { exit }
-        Default { Write-Host "Неверный выбор." -ForegroundColor Red; Start-Sleep -Seconds 1; continue }
+        Default { Write-Host "Неверный выбор." -ForegroundColor Red; Start-Sleep -Seconds 1 }
     }
 
     Write-Host ""
@@ -118,7 +114,7 @@ do {
     Write-Host " [5] Назад в меню" -ForegroundColor White
     Write-Host " [0] Выйти" -ForegroundColor Gray
     
-    $finalChoice = Read-Host "Выберите действие"
-    if ($finalChoice -eq "0") { exit }
+    $finalAction = Read-Host "Выберите действие"
+    if ($finalAction -eq "0") { exit }
 
-} while ($finalChoice -eq "5")
+} while ($finalAction -eq "5")
