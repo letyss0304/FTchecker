@@ -50,13 +50,13 @@ function Scan-Memory {
 do {
     Clear-Host
     Write-Host "=========================================================" -ForegroundColor Cyan
-    Write-Host "   SERVER SYSTEM SCANNER (SS) - VERSION 2.0 [FINAL]      " -ForegroundColor White
+    Write-Host "   FT/RW Checker - VERSION 2.0      " -ForegroundColor White
     Write-Host "=========================================================" -ForegroundColor Cyan
     Write-Host ""
     Write-Host " [1] Полная проверка (1.5 мин) - [РЕКОМЕНДУЕТСЯ]" -ForegroundColor Yellow
     Write-Host " [2] Быстрый поиск DLL инъекций" -ForegroundColor Yellow
-    Write-Host " [3] Анализ Hitbox/Reach (ДЕТЕКТ)" -ForegroundColor Red
-    Write-Host " [0] Выход" -ForegroundColor Gray
+    Write-Host " [3] Анализ Hitbox/Reach" -ForegroundColor Yellow
+    Write-Host " [0] Выход" -ForegroundColor Red
     Write-Host ""
     
     $choice = Read-Host "Выберите модуль"
@@ -76,7 +76,7 @@ do {
             Scan-Memory
             
             # 3. Финальный перебор (30 сек)
-            Type-Log "Этап 3: Сверка сигнатур с базой данных (Vape, Akrien, Flux, Liquid)..." "Yellow"
+            Type-Log "Этап 3: Сверка сигнатур с базой данных (Nursultan, Akrien, Delta, CatLean)..." "Yellow"
             for ($i = 0; $i -le 100; $i += 5) {
                 Write-Progress -Activity "ФИНАЛЬНЫЙ АНАЛИЗ" -Status "Синхронизация данных: $i%" -PercentComplete $i
                 Start-Sleep -Milliseconds 1500 # Суммарно еще 30 сек
@@ -95,7 +95,7 @@ do {
             Type-Log "Анализ хитбоксов и дистанции атаки..." "Red"
             Scan-FileSystem
             Write-Host "`n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
-            Write-Host "!! ОБНАРУЖЕНЫ ИЗМЕНЕННЫЕ ХИТБОКСЫ (1.24x) !!" -ForegroundColor Black -BackgroundColor Red
+            Write-Host "!! ОБНАРУЖЕНЫ ИЗМЕНЕННЫЕ ХИТБОКСЫ В javaw.exe (1.24x) !!" -ForegroundColor Black -BackgroundColor Red
             Write-Host "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
             [System.Media.SystemSounds]::Hand.Play()
         }
@@ -108,3 +108,4 @@ do {
     Write-Host " [0] Выйти" -ForegroundColor Gray
     $final = Read-Host "Действие"
 } while ($final -eq "5")
+
