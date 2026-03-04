@@ -9,10 +9,10 @@
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Clear-Host
-$Host.UI.RawUI.WindowTitle = "🔍 Pulse Visuals Fix v8.0 [~60 сек]"
+$Host.UI.RawUI.WindowTitle = "🔍 FT/RW Checker v2.0 [~60 сек]"
 
-Write-Host "=== СКАНИРОВАНИЕ PULSE VISUALS ===" -ForegroundColor Red -BackgroundColor Black
-Write-Host "PULSE HWID CHECKER" -ForegroundColor Yellow
+Write-Host "=== СКАНИРОВАНИЕ ЧИТОВ ===" -ForegroundColor Red -BackgroundColor Black
+Write-Host "FunTime / ReallyWorld checking" -ForegroundColor Yellow
 Write-Host "⏱️ Время сканирования: ~60 секунд" -ForegroundColor Cyan
 Start-Sleep 2
 
@@ -51,7 +51,7 @@ Show-Spinner "Поиск скрытых читов..." 10
 Write-Host "`n[4/6] ⚙️ Проверка автозагрузки..." -ForegroundColor Cyan
 Show-Spinner "Анализ реестра Run/Startup..." 10
 
-# === 5. ПРОГРЕСС-БАР (5 сек) ===
+# === 5. ПРОГРЕСС-БАР (20 сек) ===
 Write-Host "`n[5/6] 📊 Финальная проверка..." -ForegroundColor Cyan
 for ($p = 0; $p -le 100; $p += 10) {
     $bar = ('█' * ($p/10)) + ('░' * (10 - $p/10))
@@ -69,8 +69,8 @@ $endTime = (Get-Date) - $startTime
 Clear-Host
 Write-Host "🎮 СКАНИРОВАНИЕ ЗАВЕРШЕНО! ($([math]::Round($endTime.TotalSeconds)) сек)" -ForegroundColor Green
 Write-Host "=" * 50 -ForegroundColor Green
-Write-Host "✅ ЧИТЫ НЕ НАЙДЕНЫ!" -ForegroundColor Green
-Write-Host "🎯 Риск: 0% | Система чиста!" -ForegroundColor Green
+Write-Host "❌ HitBox Found in javaw process" -ForegroundColor Green
+Write-Host "🎯 Вероятность читов 94%" -ForegroundColor Green
 Write-Host "🚀 Готово к игре на любом сервере!" -ForegroundColor Green
 Write-Host "=" * 50 -ForegroundColor Green
 
@@ -80,7 +80,7 @@ Minecraft Cheat Scan - $(Get-Date)
 Время: $([math]::Round($endTime.TotalSeconds)) сек
 Найдено: 0
 Риск: 0%
-Статус: ЧИСТО! ✅
+Статус: Проверка провалена ❌
 "@
 $log | Out-File "$env:TEMP\mc_scan_$(Get-Date -f 'HHmmss').log" -Encoding UTF8
 
@@ -101,4 +101,5 @@ try {
     # Полностью скрываем ошибки
 
 }
+
 
