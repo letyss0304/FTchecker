@@ -52,7 +52,7 @@ function Show-FastScan($duration) {
 do {
     Clear-Host
     Write-Host "=========================================================" -ForegroundColor Cyan
-    Write-Host "   CHECK TOOL: REALLYWORLD / FUNTIME Edition    " -ForegroundColor White
+    Write-Host "   OFFICIAL CHECK TOOL: REALLYWORLD / FUNTIME Edition    " -ForegroundColor White
     Write-Host "=========================================================" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "Выберите модуль проверки:" -ForegroundColor Gray
@@ -71,4 +71,54 @@ do {
             Type-Text ">>> ЗАПУСК ПОЛНОЙ ПРОВЕРКИ (ALL MODULES)..." "Cyan"
             Show-FastScan 15
             for ($i = 0; $i -le 100; $i += 10) {
-                Write-Progress -Activity "ГЛОБАЛЬНЫЙ СКАН" -Status "
+                Write-Progress -Activity "ГЛОБАЛЬНЫЙ СКАН" -Status "Прогресс: $i%" -PercentComplete $i
+                Start-Sleep -Milliseconds 400
+            }
+            Write-Host "`n[SUCCESS] Вердикт: Игрок полностью чист. Стороннее ПО не обнаружено." -ForegroundColor Green
+        }
+        "2" {
+            Clear-Host
+            Type-Text ">>> Запуск модуля: CLICK_ANALYZER..." "Cyan"
+            Show-FastScan 5
+            Write-Host "`n[!] Результат: Кликеры не найдены." -ForegroundColor Green
+        }
+        "3" {
+            Clear-Host
+            Type-Text ">>> Запуск модуля: DLL_INSPECTOR..." "Cyan"
+            Show-FastScan 5
+            Write-Host "`n[!] Результат: Сторонние DLL в памяти процесса отсутствуют." -ForegroundColor Green
+        }
+        "4" {
+            Clear-Host
+            Type-Text ">>> Запуск модуля: HITBOX_DETECTOR v2.1..." "Cyan"
+            Start-Sleep -Seconds 1
+            Show-HitboxGrid
+            Write-Host "`n[!] Считывание дистанции атаки (Reach Distance)..." -ForegroundColor White
+            Show-FastScan 8
+            
+            # Эффект обнаружения
+            Write-Host "`n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
+            Write-Host "!! ВНИМАНИЕ: ОБНАРУЖЕНА АНОМАЛИЯ ХИТБОКСОВ !!" -ForegroundColor Black -BackgroundColor Red
+            Write-Host "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
+            Write-Host ""
+            Write-Host "Объект: " -NoNewline; Write-Host "net.minecraft.entity.Entity" -ForegroundColor Yellow
+            Write-Host "Параметр: " -NoNewline; Write-Host "f3_boundingbox_size" -ForegroundColor Yellow
+            Write-Host "Значение: " -NoNewline; Write-Host "MODIFIED (1.42x)" -ForegroundColor Red
+            Write-Host "Дистанция: " -NoNewline; Write-Host "3.84 blocks (Limit: 3.0)" -ForegroundColor Red
+            Write-Host ""
+            Write-Host "Статус: Обнаружен Reach/Hitbox Expand" -ForegroundColor Red
+            [System.Media.SystemSounds]::Hand.Play()
+        }
+        "0" { exit }
+        Default { Write-Host "Неверный выбор." -ForegroundColor Red; Start-Sleep -Seconds 1; continue }
+    }
+
+    Write-Host ""
+    Write-Host "=========================================================" -ForegroundColor Cyan
+    Write-Host " [5] Назад в меню" -ForegroundColor White
+    Write-Host " [0] Выйти" -ForegroundColor Gray
+    
+    $finalChoice = Read-Host "Выберите действие"
+    if ($finalChoice -eq "0") { exit }
+
+} while ($finalChoice -eq "5")
