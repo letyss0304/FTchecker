@@ -10,62 +10,72 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Clear-Host
 
-Write-Host "ANTI-CHEAT SCAN v3.1" -ForegroundColor Cyan
-Write-Host "Minecraft Client Check (FunTime/ReallyWorld)" -ForegroundColor DarkCyan
+Clear-Host
+$Host.UI.RawUI.BackgroundColor = "Black"
+$Host.UI.RawUI.ForegroundColor = "Green"
+Clear-Host
+
+Write-Host "root@anticheat-node-47:~# " -NoNewline -ForegroundColor Green
+Start-Sleep -Milliseconds 400
+Write-Host "initiate client_integrity_scan --target minecraft.exe --deep" -ForegroundColor White
+
 Write-Host ""
+Write-Host "[KERNEL] Loading sigdb_v9.4.1 ... done" -ForegroundColor DarkGreen
+Write-Host "[R0] Ring-0 hook established" -ForegroundColor DarkGreen
+Start-Sleep -Milliseconds 1200
 
-Start-Sleep -Milliseconds 800
-
-Write-Host "Инициализация сканера..." -ForegroundColor Yellow
-Start-Sleep -Seconds 4
-
-Write-Host "Проверка цифровой подписи клиента..." -ForegroundColor White -NoNewline
-for ($i = 1; $i -le 12; $i++) { 
-    Write-Host "." -NoNewline -ForegroundColor Gray
-    Start-Sleep -Milliseconds (Get-Random -Min 400 -Max 900)
-}
-Write-Host " OK" -ForegroundColor Green
-Start-Sleep -Seconds 2
-
-Write-Host "Сканирование памяти процесса..." -ForegroundColor White -NoNewline
-$progress = 0
-while ($progress -lt 100) {
-    $progress += Get-Random -Min 3 -Max 11
-    if ($progress -gt 100) { $progress = 100 }
-    Write-Host "`rСканирование памяти: $progress%" -NoNewline
-    Start-Sleep -Milliseconds (Get-Random -Min 800 -Max 1800)
-}
-Write-Host "`rСканирование памяти: 100%          " -ForegroundColor Green
+Write-Host ""
+Write-Host "  00000000  4D 5A 90 00 03 00 00 00  04 00 00 00 FF FF 00 00   MZ............." -ForegroundColor DarkGreen
+Write-Host "  00000010  B8 00 00 00 00 00 00 00  40 00 00 00 00 00 00 00   ........@......." -ForegroundColor DarkGreen
+Write-Host "[MEM] Base address mapped @ 0x7FF6A1230000" -ForegroundColor Green
 Start-Sleep -Seconds 3
 
-Write-Host "Анализ загруженных модулей..." -ForegroundColor White
+Write-Host ""
+Write-Host "Scanning memory regions..." -NoNewline
+for ($i=1; $i -le 45; $i++) {
+    Write-Host "." -NoNewline -ForegroundColor DarkGreen
+    Start-Sleep -Milliseconds (Get-Random -Min 1800 -Max 3200)
+}
+Write-Host " [DONE]" -ForegroundColor Green
+
+Write-Host "[SIG] Pattern scan (aob) ... 81 ? ? ? ? ? 48 8B ? ? ? ? ? E8" -ForegroundColor Yellow
+Write-Host "[SIG] Match found @ offset +0x1A37F8 (可能性: 98.7%)" -ForegroundColor Red
+Start-Sleep -Seconds 2
+
+Write-Host ""
+Write-Host "Dumping suspected module headers..." -ForegroundColor White
+Write-Host "  Module: unknown_x64.dll" -ForegroundColor Yellow
+Write-Host "  Hash: SHA256 → 4b7e9f2c1a8d3e5f6091b2c4d8e7f901a2b3c4d5e6f78901a2b3c4d5e6f7" -ForegroundColor DarkRed
+Write-Host "  Entropy: 7.892  ← highly suspicious" -ForegroundColor Red
+Start-Sleep -Seconds 4
+
+Write-Host ""
+Write-Host "[BEHAVIOR] Hook detection: DirectX Present hooked" -ForegroundColor Red
+Write-Host "[BEHAVIOR] Injected thread detected (TID 0x1A4C)" -ForegroundColor Red
+Write-Host "[BEHAVIOR] WriteProcessMemory calls from external process" -ForegroundColor Red
 Start-Sleep -Seconds 5
 
-Write-Host "Проверка известных сигнатур читов..." -ForegroundColor White -NoNewline
-for ($i = 1; $i -le 8; $i++) {
-    Write-Host "." -NoNewline -ForegroundColor Gray
-    Start-Sleep -Milliseconds (Get-Random -Min 1200 -Max 2200)
-}
-Write-Host " завершено" -ForegroundColor Green
-Start-Sleep -Seconds 2
+Write-Host ""
+Write-Host "root@anticheat-node-47:~# " -NoNewline -ForegroundColor Green
+Write-Host "scan_status" -ForegroundColor White
+Start-Sleep -Milliseconds 900
 
-Write-Host "Проверка целостности файлов..." -ForegroundColor White -NoNewline
-Start-Sleep -Seconds 8
-Write-Host " OK" -ForegroundColor Green
-Start-Sleep -Seconds 2
+Write-Host ""
+Write-Host "╔════════════════════════════════════════════╗" -ForegroundColor Red
+Write-Host "║          ! ! !  THREAT DETECTED  ! ! !     ║" -ForegroundColor Red
+Write-Host "║  Type     : User-mode code injection       ║" -ForegroundColor Yellow
+Write-Host "║  Family   : Matrix/Aristois/Wurst variant  ║" -ForegroundColor Yellow
+Write-Host "║  Confidence: 99.4%                          ║" -ForegroundColor Red
+Write-Host "╚════════════════════════════════════════════╝" -ForegroundColor Red
 
-Write-Host "Финальный анализ поведения..." -ForegroundColor Yellow
-Start-Sleep -Seconds 12
+Write-Host ""
+Write-Host "[LOG] Report generated → /var/log/cheat_detections/2026-03-04_1423_player_$env:USERNAME" -ForegroundColor DarkGreen
+Write-Host "[NET] Uploading evidence packet ... done" -ForegroundColor DarkGreen
 
-Write-Host "`nРЕЗУЛЬТАТ СКАНИРОВАНИЯ:" -ForegroundColor Cyan
-Start-Sleep -Milliseconds 800
+Write-Host ""
+Write-Host "root@anticheat-node-47:~# " -NoNewline -ForegroundColor Green
+Write-Host "_"
 
-Write-Host "!!! ЧИТЫ ОБНАРУЖЕНЫ !!!" -ForegroundColor Red
-Write-Host "Тип: modification / memory injection" -ForegroundColor Yellow
-Write-Host "Сигнатура совпала с известными читами" -ForegroundColor DarkRed
-
-Write-Host "`nОбщее время проверки: ~1 мин 35 сек" -ForegroundColor DarkGray
-Start-Sleep -Milliseconds 2000
-
-Write-Host "Скан завершён." -ForegroundColor Gray
-Start-Sleep -Milliseconds 1500
+# Чтобы окно не закрывалось сразу
+Write-Host "`nPress any key to exit terminal..." -ForegroundColor DarkGray
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
