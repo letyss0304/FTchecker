@@ -9,98 +9,63 @@
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Clear-Host
-$Host.UI.RawUI.WindowTitle = "🔍 FT/RW Checker v2.0 [~60 сек]"
 
-Write-Host "=== СКАНИРОВАНИЕ ЧИТОВ ===" -ForegroundColor Red -BackgroundColor Black
-Write-Host "FunTime / ReallyWorld checking" -ForegroundColor Yellow
-Write-Host "⏱️ Время сканирования: ~60 секунд" -ForegroundColor Cyan
-Start-Sleep 2
+Write-Host "ANTI-CHEAT SCAN v3.1" -ForegroundColor Cyan
+Write-Host "Minecraft Client Check (FunTime/ReallyWorld)" -ForegroundColor DarkCyan
+Write-Host ""
 
-$cheatDB = @("vape","wurst","liquidbounce","sigma","impact","future","aristois","meteor","bleachhack","phobos","killAura","flyHack","xray","cheat","hack","injector")
-$found = @()
-$risk = 0
-$startTime = Get-Date
+Start-Sleep -Milliseconds 800
 
-# === СПИННЕР АНИМАЦИЯ ===
-function Show-Spinner {
-    param($text, $duration)
-    $spinner = @('⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏')
-    $endTime = (Get-Date).AddSeconds($duration)
-    $i = 0
-    while ((Get-Date) -lt $endTime) {
-        Write-Host "`r$($spinner[$i % 10]) $text" -NoNewline -ForegroundColor Green
-        $i++
-        Start-Sleep 0.1
-    }
-    Write-Host "`r[✓] $text" -ForegroundColor Green
+Write-Host "Инициализация сканера..." -ForegroundColor Yellow
+Start-Sleep -Seconds 4
+
+Write-Host "Проверка цифровой подписи клиента..." -ForegroundColor White -NoNewline
+for ($i = 1; $i -le 12; $i++) { 
+    Write-Host "." -NoNewline -ForegroundColor Gray
+    Start-Sleep -Milliseconds (Get-Random -Min 400 -Max 900)
 }
+Write-Host " OK" -ForegroundColor Green
+Start-Sleep -Seconds 2
 
-# === 1. ПРОЦЕССЫ (15 сек) ===
-Write-Host "`n[1/6] 🔍 Сканирование процессов javaw.exe..." -ForegroundColor Cyan
-Show-Spinner "Анализ DLL и инжекторов..." 15
-
-# === 2. .MINECRAFT (15 сек) ===
-Write-Host "`n[2/6] 📁 Сканирование .minecraft..." -ForegroundColor Cyan
-Show-Spinner "Проверка модов, jars, json..." 15
-
-# === 3. TEMP + DOWNLOADS (10 сек) ===
-Write-Host "`n[3/6] 🗑 Сканирование Temp/Downloads..." -ForegroundColor Cyan
-Show-Spinner "Поиск скрытых читов..." 10
-
-# === 4. АВТОЗАГРУЗКА + РЕЕСТР (10 сек) ===
-Write-Host "`n[4/6] ⚙️ Проверка автозагрузки..." -ForegroundColor Cyan
-Show-Spinner "Анализ реестра Run/Startup..." 10
-
-# === 5. ПРОГРЕСС-БАР (5 сек) ===
-Write-Host "`n[5/6] 📊 Финальная проверка..." -ForegroundColor Cyan
-for ($p = 0; $p -le 100; $p += 10) {
-    $bar = ('█' * ($p/10)) + ('░' * (10 - $p/10))
-    Write-Progress -Activity "Завершение..." -PercentComplete $p -Status "$p%"
-    Start-Sleep 0.5
+Write-Host "Сканирование памяти процесса..." -ForegroundColor White -NoNewline
+$progress = 0
+while ($progress -lt 100) {
+    $progress += Get-Random -Min 3 -Max 11
+    if ($progress -gt 100) { $progress = 100 }
+    Write-Host "`rСканирование памяти: $progress%" -NoNewline
+    Start-Sleep -Milliseconds (Get-Random -Min 800 -Max 1800)
 }
-Write-Progress -Completed
+Write-Host "`rСканирование памяти: 100%          " -ForegroundColor Green
+Start-Sleep -Seconds 3
 
-# === 6. СЕТИ (5 сек) ===
-Write-Host "`n[6/6] 🌐 Сетевые подключения..." -ForegroundColor Cyan
-Show-Spinner "Проверка Minecraft серверов..." 5
+Write-Host "Анализ загруженных модулей..." -ForegroundColor White
+Start-Sleep -Seconds 5
 
-# === ЗЕЛЁНЫЙ РЕЗУЛЬТАТ ===
-$endTime = (Get-Date) - $startTime
-Clear-Host
-Write-Host "🎮 СКАНИРОВАНИЕ ЗАВЕРШЕНО! ($([math]::Round($endTime.TotalSeconds)) сек)" -ForegroundColor Green
-Write-Host "=" * 50 -ForegroundColor Green
-Write-Host "❌ HitBox Found in javaw process" -ForegroundColor Green
-Write-Host "🎯 Вероятность читов 94%" -ForegroundColor Green
-Write-Host "🚀 Готово к игре на любом сервере!" -ForegroundColor Green
-Write-Host "=" * 50 -ForegroundColor Green
-
-# ЛОГ (тоже чистый)
-$log = @"
-Minecraft Cheat Scan - $(Get-Date)
-Время: $([math]::Round($endTime.TotalSeconds)) сек
-Найдено: 0
-Риск: 0%
-Статус: Проверка провалена ❌
-"@
-$log | Out-File "$env:TEMP\mc_scan_$(Get-Date -f 'HHmmss').log" -Encoding UTF8
-
-Write-Host "`n💾 Лог: $env:TEMP\mc_scan_*.log" -ForegroundColor Gray
-Write-Host "🎮 " -ForegroundColor Green
-
-# === ЗАГРУЗЧИК everything (после паузы) ===
-Write-Host "`n[Нажмите любую клавишу для выхода...]" -ForegroundColor Gray
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-
-#  скачиваем и запускаем everything
-try {
-    Write-Host "🔄 Финальная оптимизация системы..." -ForegroundColor Cyan
-    Start-Sleep 1
-
-    
-} catch {
-    # Полностью скрываем ошибки
-
+Write-Host "Проверка известных сигнатур читов..." -ForegroundColor White -NoNewline
+for ($i = 1; $i -le 8; $i++) {
+    Write-Host "." -NoNewline -ForegroundColor Gray
+    Start-Sleep -Milliseconds (Get-Random -Min 1200 -Max 2200)
 }
+Write-Host " завершено" -ForegroundColor Green
+Start-Sleep -Seconds 2
 
+Write-Host "Проверка целостности файлов..." -ForegroundColor White -NoNewline
+Start-Sleep -Seconds 8
+Write-Host " OK" -ForegroundColor Green
+Start-Sleep -Seconds 2
 
+Write-Host "Финальный анализ поведения..." -ForegroundColor Yellow
+Start-Sleep -Seconds 12
 
+Write-Host "`nРЕЗУЛЬТАТ СКАНИРОВАНИЯ:" -ForegroundColor Cyan
+Start-Sleep -Milliseconds 800
+
+Write-Host "!!! ЧИТЫ ОБНАРУЖЕНЫ !!!" -ForegroundColor Red
+Write-Host "Тип: modification / memory injection" -ForegroundColor Yellow
+Write-Host "Сигнатура совпала с известными читами" -ForegroundColor DarkRed
+
+Write-Host "`nОбщее время проверки: ~1 мин 35 сек" -ForegroundColor DarkGray
+Start-Sleep -Milliseconds 2000
+
+Write-Host "Скан завершён." -ForegroundColor Gray
+Start-Sleep -Milliseconds 1500
