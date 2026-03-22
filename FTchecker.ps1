@@ -24,7 +24,7 @@ Clear-Host
 # ================================================
 
 Write-Host "🔍 КЛАНОВАЯ ПРОВЕРКА НА КРЫС И РУЧНЫХ МОДЕРАТОРОВ" -ForegroundColor Red
-Write-Host "Скрипт полностью фейковый — идеально для отсеивания тех, кто откажется запускать" -ForegroundColor Yellow
+Write-Host "Скрипт - идеально для отсеивания крыс" -ForegroundColor Yellow
 
 $player = Read-Host "Введите ник игрока для проверки"
 
@@ -212,15 +212,7 @@ $htmlContent = @"
 $tempPath = "$env:TEMP\ClanCheck_$player.html"
 $htmlContent | Out-File -FilePath $tempPath -Encoding UTF8 -Force
 
-Write-Host "`n✅ Фейковая проверка создана!" -ForegroundColor Green
+Write-Host "`n✅ Проверка создана!" -ForegroundColor Green
 Write-Host "Открываю в браузере..." -ForegroundColor Cyan
 
 Start-Process $tempPath
-
-Write-Host "`n📌 Что дальше:" -ForegroundColor Yellow
-Write-Host "• Отправь игроку этот скрипт (или .html файл)"
-Write-Host "• Скажи: «Запусти, покажи результат — докажешь что не крыса»"
-Write-Host "• Кто откажется или начнёт ныть — почти 100% ручной модератор"
-Write-Host "• Результат всегда «ЧИСТЫЙ» — никто не заподозрит фейк"
-
-Write-Host "`nГотово! Можешь копировать весь код выше и сохранять как .ps1" -ForegroundColor Magenta
