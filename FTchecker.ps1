@@ -125,7 +125,7 @@ $htmlContent = @"
 </head>
 <body>
     <div class="container">
-        <h1>🔍 БАЗА ДАННЫХ КЛАНА v4.20</h1>
+        <h1>🔍 БАЗА ДАННЫХ КЛАНА Tribunal Reborn v4.20</h1>
         <p class="subtitle">Проверка на переписку с модераторами / админами</p>
         
         <div class="player">ИГРОК: <strong>$player</strong></div>
