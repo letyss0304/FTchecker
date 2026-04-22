@@ -10,7 +10,6 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Clear-Host
 
-@echo off
 setlocal enabledelayedexpansion
 color 0b
 title WhiteGrief Security Framework [Version 8.1.22]
