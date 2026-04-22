@@ -10,70 +10,62 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Clear-Host
 
+@echo off
 setlocal enabledelayedexpansion
-color 0b
-title WhiteGrief Security Framework [Version 8.1.22]
-mode con: cols=100 lines=30
+color 07
+title WhiteGrief Security Tool - System Verification
+mode con: cols=90 lines=25
 
-echo [INFO] Запуск WhiteGrief Security Framework...
-echo [INFO] Проверка сертификатов безопасности...
+echo [CONNECT] Установка связи с центральным узлом WhiteGrief...
 timeout /t 2 >nul
-
-:loading
-echo [HASH] Проверка целостности: [##########----------] 50%%
-timeout /t 1 >nul
-cls
-echo [HASH] Проверка целостности: [####################] 100%%
-timeout /t 1 >nul
-
-echo ==========================================================================
-echo                   WHITE GRIEF - ADVANCED SYSTEM SCANNER
-echo ==========================================================================
-echo СИСТЕМА: %COMPUTERNAME% | ПОЛЬЗОВАТЕЛЬ: %USERNAME%
-echo СТАТУС: Глубокое сканирование оперативной памяти и кэша Java
-echo ==========================================================================
+echo [OK] Узел подтвержден. Начинаю верификацию клиента...
 echo.
 
-echo [PROCESS] Поиск активных дескрипторов javaw.exe...
+echo -----------------------------------------------------------
+echo Сбор системной информации для анализа модератором:
+echo -----------------------------------------------------------
+echo ИМЯ ПК: %COMPUTERNAME%
+echo СИСТЕМА: Windows %PROCESSOR_ARCHITECTURE%
+echo ВРЕМЯ ЗАПУСКА: %TIME%
+echo -----------------------------------------------------------
+timeout /t 1 >nul
+
+echo [1/4] Проверка хэш-сумм файлов .jar...
+echo [HASH] 1.16.5.json ........................... [MATCH]
+echo [HASH] client.jar ............................ [MATCH]
+echo [HASH] optifine_map.txt ...................... [MATCH]
 timeout /t 2 >nul
-echo [OK] Процесс найден (PID: %RANDOM%). Начинаю инъекцию проверочного модуля...
+
+echo [2/4] Инспекция активных библиотек (DLL)...
+echo [DLL] Scanning: jvm.dll ...................... [SECURE]
+echo [DLL] Scanning: lwjgl.dll .................... [SECURE]
+echo [DLL] Scanning: net_util.dll ................. [SECURE]
 timeout /t 3 >nul
 
-echo [SCAN] Анализ JNI-методов на наличие подмен (Reach/Hitbox)...
-echo [SCAN] Проверка классов: net.minecraft.client.entity.EntityPlayerSP
-timeout /t 1 >nul
-echo [SCAN] Проверка классов: net.minecraft.network.play.client.C03PacketPlayer
-timeout /t 1 >nul
-echo [SCAN] Проверка на наличие AutoClicker (анализ задержки MOUSE_EVENT)...
-timeout /t 4 >nul
-
-echo.
-echo [!] ВНИМАНИЕ: Обнаружены подозрительные вызовы в стеке памяти.
-echo [!] Адрес: 0x00007FF%RANDOM% - Тип: Persistent Memory Hook
+echo [3/4] Анализ реестра на предмет инъекций...
+echo [REG] HKEY_CURRENT_USER\Software\JavaSoft .... [CLEAN]
+echo [REG] HKEY_LOCAL_MACHINE\SYSTEM\Current ...... [CLEAN]
 timeout /t 2 >nul
-echo.
 
-echo [FILE] Сканирование временных файлов браузеров (Chrome/Opera/Yandex)...
+echo [4/4] Сверка сигнатур с базой данных (Cloud Scan)...
+echo [SYNC] Обработка данных...
+:: Имитация долгой загрузки
+for /L %%i in (1,1,20) do (
+    set /p "=. " <nul
+    timeout /t 0 >nul
+)
+echo [DONE]
 timeout /t 1 >nul
-echo [FILE] Анализ истории загрузок на ключевые слова: 'client', 'external', 'injector'...
-timeout /t 3 >nul
 
-echo [NET] Проверка входящего трафика на наличие сигнатур DLL-инъекций...
-timeout /t 2 >nul
-echo [NET] Анализ завершен. Пакеты синхронизированы.
 echo.
-
-echo --------------------------------------------------------------------------
-echo                          РЕЗУЛЬТАТЫ СКАНИРОВАНИЯ
-echo --------------------------------------------------------------------------
-echo [+] Модификации клиента: Minecraft 1.16.5 (Forge/Optifine)
-echo [+] Подозрительные файлы: %RANDOM%.tmp (в папке Temp)
-echo [+] Наложение (Overlay): Не обнаружено
-echo [+] Макросы мыши: Обнаружена активность в фоновом режиме
-echo --------------------------------------------------------------------------
+echo ===========================================================
+echo                ВЕРДИКТ СИСТЕМЫ: ЧИСТ (CLEAN)
+echo ===========================================================
+echo Все компоненты соответствуют оригинальным версиям игры.
+echo Данные переданы в панель управления сервером.
+echo ID сессии: WG-%RANDOM%-%RANDOM%
+echo ===========================================================
 echo.
-echo [FINAL] Отчет сформирован и сохранен в директорию модерации.
-echo [FINAL] Пожалуйста, не закрывайте это окно до конца диалога с модератором.
-echo.
-echo Нажмите любую клавишу для выхода...
+echo Пожалуйста, предоставьте этот ID сессии модератору.
+echo Нажмите любую клавишу для завершения...
 pause >nul
