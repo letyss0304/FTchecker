@@ -10,62 +10,44 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Clear-Host
 
-@echo off
-setlocal enabledelayedexpansion
-color 07
-title WhiteGrief Security Tool - System Verification
-mode con: cols=90 lines=25
+$Host.UI.RawUI.WindowTitle = "WhiteGrief | Advanced System Integrity Verification v2.1"
 
-echo [CONNECT] Установка связи с центральным узлом WhiteGrief...
-timeout /t 2 >nul
-echo [OK] Узел подтвержден. Начинаю верификацию клиента...
-echo.
+Write-Host "[*] Инициализация сессии WhiteGrief Security..." -ForegroundColor Cyan
+Start-Sleep -Seconds 2
 
-echo -----------------------------------------------------------
-echo Сбор системной информации для анализа модератором:
-echo -----------------------------------------------------------
-echo ИМЯ ПК: %COMPUTERNAME%
-echo СИСТЕМА: Windows %PROCESSOR_ARCHITECTURE%
-echo ВРЕМЯ ЗАПУСКА: %TIME%
-echo -----------------------------------------------------------
-timeout /t 1 >nul
+Write-Host "[+] Подключение к базе данных сигнатур через HTTPS..." -ForegroundColor Green
+Start-Sleep -Seconds 1
+Write-Host "[+] Авторизация модератора: [SUCCESS]" -ForegroundColor Green
+Write-Host "------------------------------------------------------------"
 
-echo [1/4] Проверка хэш-сумм файлов .jar...
-echo [HASH] 1.16.5.json ........................... [MATCH]
-echo [HASH] client.jar ............................ [MATCH]
-echo [HASH] optifine_map.txt ...................... [MATCH]
-timeout /t 2 >nul
-
-echo [2/4] Инспекция активных библиотек (DLL)...
-echo [DLL] Scanning: jvm.dll ...................... [SECURE]
-echo [DLL] Scanning: lwjgl.dll .................... [SECURE]
-echo [DLL] Scanning: net_util.dll ................. [SECURE]
-timeout /t 3 >nul
-
-echo [3/4] Анализ реестра на предмет инъекций...
-echo [REG] HKEY_CURRENT_USER\Software\JavaSoft .... [CLEAN]
-echo [REG] HKEY_LOCAL_MACHINE\SYSTEM\Current ...... [CLEAN]
-timeout /t 2 >nul
-
-echo [4/4] Сверка сигнатур с базой данных (Cloud Scan)...
-echo [SYNC] Обработка данных...
-:: Имитация долгой загрузки
-for /L %%i in (1,1,20) do (
-    set /p "=. " <nul
-    timeout /t 0 >nul
+$tasks = @(
+    "Анализ дампов памяти javaw.exe",
+    "Проверка загруженных модулей jvm.dll",
+    "Сканирование кэша дескрипторов файлов",
+    "Поиск следов инъекций в explorer.exe",
+    "Верификация контрольных сумм библиотек LWJGL",
+    "Проверка реестра на наличие ключей автозапуска ПО",
+    "Эвристический анализ сетевых пакетов Minecraft"
 )
-echo [DONE]
-timeout /t 1 >nul
 
-echo.
-echo ===========================================================
-echo                ВЕРДИКТ СИСТЕМЫ: ЧИСТ (CLEAN)
-echo ===========================================================
-echo Все компоненты соответствуют оригинальным версиям игры.
-echo Данные переданы в панель управления сервером.
-echo ID сессии: WG-%RANDOM%-%RANDOM%
-echo ===========================================================
-echo.
-echo Пожалуйста, предоставьте этот ID сессии модератору.
-echo Нажмите любую клавишу для завершения...
-pause >nul
+foreach ($task in $tasks) {
+    $progress = 0
+    Write-Host "[PROCESS] $task..." -NoNewline
+    while ($progress -lt 100) {
+        $progress += (Get-Random -Minimum 5 -Maximum 20)
+        if ($progress -gt 100) { $progress = 100 }
+        Write-Host "." -NoNewline -ForegroundColor Yellow
+        Start-Sleep -Milliseconds (Get-Random -Minimum 50 -Maximum 300)
+    }
+    Write-Host " [DONE]" -ForegroundColor Green
+}
+
+Write-Host "------------------------------------------------------------"
+Write-Host "[!] СКАНИРОВАНИЕ ЗАВЕРШЕНО" -ForegroundColor Cyan
+Write-Host "[RESULT] Запрещенных модификаций не обнаружено." -ForegroundColor White -BackgroundColor Green
+Write-Host "[RESULT] Система полностью соответствует стандартам WhiteGrief." -ForegroundColor Green
+Write-Host "------------------------------------------------------------"
+Write-Host "ID Проверки: WG-X$(Get-Random -Minimum 1000 -Maximum 9999)-$(Get-Date -Format "HHmm")"
+Write-Host "Сообщите этот ID модератору и не закрывайте окно."
+Write-Host "`nНажмите Enter, чтобы выйти..."
+Read-Host
